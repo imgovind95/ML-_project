@@ -1,0 +1,155 @@
+/* Global Styles */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 20px;
+  background-color: #121212;
+  color: #e0e0e0;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* Title */
+h1 {
+  color: #00adb5;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+/* Section Cards */
+section {
+  background: #1e1e1e;
+  padding: 20px;
+  margin-bottom: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 173, 181, 0.2);
+  transition: background 0.3s;
+}
+
+/* Headings */
+section h2 {
+  color: #00ffc6;
+  border-bottom: 1px solid #333;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+}
+
+/* Select Dropdown */
+select, input[type="text"] {
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+  border: 1px solid #555;
+  padding: 10px;
+  border-radius: 8px;
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+/* Buttons */
+button {
+  background-color: #00adb5;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+button:hover {
+  background-color: #019ca7;
+}
+
+/* Quiz Options */
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+input[type="radio"] {
+  margin-right: 8px;
+}
+
+/* Score and Feedback */
+#score-output, #feedback-msg {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #ffd369;
+  margin-top: 10px;
+}
+
+/* Chat Response Bubble */
+.chat-bubble {
+  background-color: #2e2e2e;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 12px;
+  border: 1px solid #444;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+/* Mood Dropdown - compact width */
+#mood-select {
+  width: auto;
+  min-width: 150px;
+  max-width: 200px;
+  display: inline-block;
+}
+
+
+#chat-input {
+  background-color: #1a1a2e;
+  color: #ffffff;
+  border: 1px solid #00adb5;
+  padding: 10px;
+  border-radius: 8px;
+  width: 60%;
+  min-width: 250px;
+  max-width: 500px;
+  font-size: 1rem;
+  display: inline-block;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+#chat-input:focus {
+  border-color: #00ffc6;
+}
+
+/* Chatbot Response Styling */
+#chat-response {
+  width: 60%;
+  min-width: 250px;
+  max-width: 500px;
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 12px;
+  background-color: #2e2e2e;
+  border: 1px solid #444;
+  color: #e0e0e0;
+  font-size: 1rem;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+.quiz-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 15px; /* Adjust spacing between buttons */
+  margin-top: 20px;
+}
+
+.quiz-buttons button {
+  background-color: #00cfc8; /* Keeps current theme */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.quiz-buttons button:hover {
+  background-color: #00b3ad;
+}

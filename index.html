@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Python Learning Assistant</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>AI-Powered Python Learning Assistant</h1>
+
+  <section id="mood-section">
+    <h2>Select Your Mood</h2>
+    <select id="mood-select">
+      <option value="confused">Confused</option>
+      <option value="confident">Confident</option>
+      <option value="stressed">Stressed</option>
+    </select>
+  </section>
+
+
+ <section id="quiz-section">
+  <h2>Python Quiz</h2>
+  <div id="quiz-container"></div>
+
+  <!-- Horizontal buttons -->
+<div class="quiz-buttons">
+  <button onclick="submitQuiz()">Submit Quiz</button>
+</div>
+
+
+  <div id="score-output"></div>
+</section>
+
+
+  <div id="score-output"></div>
+</section>
+
+
+  <section id="feedback-section">
+    <h2>Feedback</h2>
+    <p id="feedback-msg"></p>
+  </section>
+
+  <section id="chat-section">
+    <h2>Ask the Assistant</h2>
+    <input type="text" id="chat-input" placeholder="Ask about Python..." />
+    <button onclick="chat()">Ask</button>
+    <div id="chat-response" class="chat-bubble"></div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>

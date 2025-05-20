@@ -1,0 +1,14 @@
+{
+  "confused": [
+    {"max_score": 50, "message": "Don't worry! Review your weak areas step-by-step."},
+    {"max_score": 100, "message": "You're getting there! Keep going!"}
+  ],
+  "confident": [
+    {"max_score": 50, "message": "You can do better! Let's aim higher."},
+    {"max_score": 100, "message": "Awesome work! Keep it up!"}
+  ],
+  "stressed": [
+    {"max_score": 50, "message": "Take a deep breath and try again."},
+    {"max_score": 100, "message": "You're doing great under pressure!"}
+  ]
+}
