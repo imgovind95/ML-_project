@@ -1,7 +1,0 @@
-{
-  "what is a variable": "A variable stores data that can be changed later.",
-  "define function": "You can define a function using the 'def' keyword like: def my_function():",
-  "loop": "Python supports 'for' and 'while' loops to repeat blocks of code.",
-  "list": "A list in Python is a collection which is ordered and changeable. Example: my_list = [1, 2, 3]",
-  "dictionary": "A dictionary is a collection of key-value pairs. Example: my_dict = {'key': 'value'}"
-}
