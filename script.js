@@ -45,7 +45,7 @@ quizData = {
     },
     {
       "question": "How do you insert a comment in Python?",
-      "options": ["# This is a comment", "// comment", "/* comment */", "<!-- comment -->"],
+      "options": ["# This is a comment", "// comment", "/* comment */", "None of the above"],
       "answer": "# This is a comment"
     },
     {
