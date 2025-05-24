@@ -195,6 +195,26 @@ function submitAnswer() {
 
 
 function submitQuiz() {
+  const submitBtn = document.getElementById("submit-btn");
+
+  if (submitBtn.innerText === "Retest") {
+    // Reset all state variables
+    currentQuestionIndex = 0;
+    score = 0;
+    answeredCount = 0;
+    answeredMap = {};
+    shuffledQuestions = shuffleArray([...quizData.questions]);
+
+    // Reset UI
+    document.getElementById("score-output").innerHTML = "";
+    document.getElementById("feedback-msg").innerText = "";
+    document.getElementById("chat-response").innerText = "";
+    document.getElementById("chat-input").value = "";
+    showQuestion(currentQuestionIndex);
+    submitBtn.innerText = "Submit Quiz";
+    return;
+  }
+
   const totalQuestions = shuffledQuestions.length;
   const percentage = (totalQuestions > 0) ? (score / totalQuestions) * 100 : 0;
 
@@ -209,8 +229,10 @@ function submitQuiz() {
   const feedback = feedbackData[mood]?.find(f => percentage <= f.max_score)?.message || "Great job!";
   document.getElementById("feedback-msg").innerText = feedback;
 
-  document.getElementById("submit-btn").style.display = "none";
+  // Change button to Retest
+  submitBtn.innerText = "Retest";
 }
+
 
 function chat() {
   const userInput = document.getElementById("chat-input").value;
