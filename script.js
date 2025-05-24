@@ -80,6 +80,7 @@ feedbackData = {
 };
 
 chatbotData = {
+  "How are you":"I'm fine!, what about you",
   "what is a variable": "A variable stores data that can be changed later.",
   "define function": "You can define a function using the 'def' keyword like: def my_function():",
   "loop": "Python supports 'for' and 'while' loops to repeat blocks of code.",
