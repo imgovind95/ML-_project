@@ -167,17 +167,13 @@ function showQuestion(index) {
   `;
   quizContainer.appendChild(questionDiv);
 }
-
 function submitAnswer() {
   const selected = document.querySelector(`input[name="q"]:checked`);
-  if (!selected) {
-    alert("Please select an answer before continuing.");
-    return;
-  }
+  const currentQuestion = shuffledQuestions[currentQuestionIndex];
+  const correct = currentQuestion.answer;
 
-  const correct = shuffledQuestions[currentQuestionIndex].answer;
-
-  if (!answeredMap[currentQuestionIndex]) {
+  // Only count the score if the user selected an option and hasn't answered it before
+  if (selected && !answeredMap[currentQuestionIndex]) {
     answeredMap[currentQuestionIndex] = true;
     answeredCount++;
 
@@ -196,6 +192,7 @@ function submitAnswer() {
     document.getElementById("quiz-container").innerHTML = "<p>You have completed all questions. You may submit now.</p>";
   }
 }
+
 
 function submitQuiz() {
   const totalQuestions = shuffledQuestions.length;
