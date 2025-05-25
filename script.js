@@ -166,7 +166,10 @@ async function generateFeedback(percentage, mood) {
 // ✅ Gemini AI - Assistant
 async function chat() {
   const userInput = document.getElementById("chat-input").value.trim();
+  const responseBox = document.getElementById("chat-response");
   if (!userInput) return;
+
+  responseBox.innerText = "Assistant is thinking...";
 
   const prompt = `Explain this Python or DSA question: "${userInput}" in a beginner-friendly way.`;
 
@@ -177,22 +180,31 @@ async function chat() {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        contents: [
-          {
-            parts: [{ text: prompt }]
-          }
-        ]
+        contents: [{ parts: [{ text: prompt }] }]
       })
     });
 
     const data = await response.json();
-    const content = data?.candidates?.[0]?.content;
+    const fullText = data?.candidates?.[0]?.content?.parts?.[0]?.text || data?.error?.message || "No response received.";
 
-    const msg = content?.parts?.[0]?.text || data?.error?.message || "No response received.";
-    document.getElementById("chat-response").innerText = msg;
+    // Typing animation
+    responseBox.innerText = "";
+    const lines = fullText.split('\n');
+    let i = 0;
+
+    function typeNextLine() {
+      if (i < lines.length) {
+        responseBox.innerText += lines[i] + '\n';
+        i++;
+        setTimeout(typeNextLine, 250); // Delay per line
+      }
+    }
+
+    typeNextLine();
 
   } catch (error) {
     console.error("Gemini assistant error:", error);
-    document.getElementById("chat-response").innerText = "Network error while asking assistant.";
+    responseBox.innerText = "Network error while asking assistant.";
   }
 }
+
