@@ -20,11 +20,14 @@
   <section id="quiz-section">
     <h2>Python Quiz</h2>
     <div id="quiz-container"></div>
+
     <div class="quiz-buttons">
-      <button id="prev-btn" onclick="prevQuestion()">Previous</button>
-      <button id="next-btn" onclick="submitAnswer()">Next</button>
-      <button id="submit-btn" style="display: none;" onclick="submitQuiz()">Submit Quiz</button>
+      <!-- ✅ Removed onclicks; JS handles these via addEventListener -->
+      <button id="prev-btn" style="display: none;">Previous</button>
+      <button id="next-btn">Next</button>
+      <button id="submit-btn" style="display: none;">Submit Quiz</button>
     </div>
+
     <div id="score-output"></div>
   </section>
 
@@ -36,10 +39,11 @@
   <section id="chat-section">
     <h2>Ask the Assistant</h2>
     <input type="text" id="chat-input" placeholder="Ask about Python..." />
-    <button onclick="chat()">Ask</button>
+    <button id="ask-btn">Ask</button>
     <div id="chat-response" class="output-box"></div>
   </section>
 
   <script src="script.js"></script>
 </body>
 </html>
+
