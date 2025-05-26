@@ -1,4 +1,4 @@
-const apiKey = 'AIzaSyBy_DTYl4i3cLqJ4q-FMjgImSlDKTrBuOg'; // Replace with your actual Gemini API key
+const apiKey = 'AIzaSyBy_DTYl4i3cLqJ4q-FMjgImSlDKTrBuOg'; // Gemini API key
 let quizData = {
   questions: [
     { question: "What is the output of print(2 ** 3)?", options: ["6", "8", "9", "5"], answer: "8" },
@@ -129,12 +129,12 @@ document.getElementById("submit-btn").addEventListener("click", () => {
   }
 });
 
-// ✅ No inline onclick — use listeners
+//  No inline onclick — use listeners
 document.getElementById("next-btn").addEventListener("click", submitAnswer);
 document.getElementById("prev-btn").addEventListener("click", prevQuestion);
 document.getElementById("ask-btn").addEventListener("click", chat);
 
-// ✅ Gemini AI - Feedback Generator
+//  Gemini AI - Feedback Generator
 async function generateFeedback(percentage, mood) {
   const prompt = `I just completed a Python quiz with a score of ${percentage.toFixed(2)}%. My mood is "${mood}". Give me motivating feedback in 2-3 sentences.`;
 
@@ -164,7 +164,7 @@ async function generateFeedback(percentage, mood) {
   }
 }
 
-// ✅ Gemini AI - Assistant Chat
+//  Gemini AI - Assistant Chat
 async function chat() {
   const userInput = document.getElementById("chat-input").value.trim();
   const responseBox = document.getElementById("chat-response");
