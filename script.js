@@ -1,5 +1,4 @@
 const apiKey = 'AIzaSyBy_DTYl4i3cLqJ4q-FMjgImSlDKTrBuOg'; // Replace with your actual Gemini API key
-
 let quizData = {
   questions: [
     { question: "What is the output of print(2 ** 3)?", options: ["6", "8", "9", "5"], answer: "8" },
@@ -82,7 +81,7 @@ function submitAnswer() {
   }
 
   if (currentQuestionIndex < shuffledQuestions.length - 1) {
-    currentQuestionIndex++;
+    currentQuestionIndex += 1;
     showQuestion(currentQuestionIndex);
   } else {
     submitQuiz();
@@ -115,6 +114,7 @@ function submitQuiz() {
   document.getElementById("submit-btn").style.display = "inline";
 }
 
+// Retest Handler
 document.getElementById("submit-btn").addEventListener("click", () => {
   if (document.getElementById("submit-btn").innerText === "Retest") {
     currentQuestionIndex = 0;
@@ -129,8 +129,10 @@ document.getElementById("submit-btn").addEventListener("click", () => {
   }
 });
 
+// ✅ No inline onclick — use listeners
 document.getElementById("next-btn").addEventListener("click", submitAnswer);
 document.getElementById("prev-btn").addEventListener("click", prevQuestion);
+document.getElementById("ask-btn").addEventListener("click", chat);
 
 // ✅ Gemini AI - Feedback Generator
 async function generateFeedback(percentage, mood) {
@@ -153,7 +155,6 @@ async function generateFeedback(percentage, mood) {
 
     const data = await response.json();
     const content = data?.candidates?.[0]?.content;
-
     const msg = content?.parts?.[0]?.text || data?.error?.message || "No feedback received.";
     document.getElementById("feedback-msg").innerText = msg;
 
@@ -163,7 +164,7 @@ async function generateFeedback(percentage, mood) {
   }
 }
 
-// ✅ Gemini AI - Assistant
+// ✅ Gemini AI - Assistant Chat
 async function chat() {
   const userInput = document.getElementById("chat-input").value.trim();
   const responseBox = document.getElementById("chat-response");
@@ -171,7 +172,13 @@ async function chat() {
 
   responseBox.innerText = "Assistant is thinking...";
 
-  const prompt = `Explain this Python or DSA question: "${userInput}" in a beginner-friendly way.`;
+  const prompt = `
+You are a helpful and intelligent assistant. A user has asked the following query. Please provide a clear, helpful, and complete response.
+
+Query: "${userInput}"
+
+If the query is about code, explain and give the correct code example in the most appropriate programming language (not just Python). If it’s a general question, respond informatively like a smart AI tutor.
+`;
 
   try {
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
@@ -196,7 +203,7 @@ async function chat() {
       if (i < lines.length) {
         responseBox.innerText += lines[i] + '\n';
         i++;
-        setTimeout(typeNextLine, 250); // Delay per line
+        setTimeout(typeNextLine, 200);
       }
     }
 
@@ -207,4 +214,7 @@ async function chat() {
     responseBox.innerText = "Network error while asking assistant.";
   }
 }
+
+
+
 
