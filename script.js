@@ -129,12 +129,12 @@ document.getElementById("submit-btn").addEventListener("click", () => {
   }
 });
 
-//  No inline onclick — use listeners
+// No inline onclick — use listeners
 document.getElementById("next-btn").addEventListener("click", submitAnswer);
 document.getElementById("prev-btn").addEventListener("click", prevQuestion);
 document.getElementById("ask-btn").addEventListener("click", chat);
 
-//  Gemini AI - Feedback Generator
+// Gemini AI - Feedback Generator
 async function generateFeedback(percentage, mood) {
   const prompt = `I just completed a Python quiz with a score of ${percentage.toFixed(2)}%. My mood is "${mood}". Give me motivating feedback in 2-3 sentences.`;
 
@@ -164,9 +164,10 @@ async function generateFeedback(percentage, mood) {
   }
 }
 
-//  Gemini AI - Assistant Chat
+// Gemini AI - Assistant Chat
 async function chat() {
-  const userInput = document.getElementById("chat-input").value.trim();
+  const inputElement = document.getElementById("chat-input");
+  const userInput = inputElement.value.trim();
   const responseBox = document.getElementById("chat-response");
   if (!userInput) return;
 
@@ -183,25 +184,47 @@ If the query is about code, explain and give the correct code example in the mos
   try {
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }]
       })
     });
 
     const data = await response.json();
-    const fullText = data?.candidates?.[0]?.content?.parts?.[0]?.text || data?.error?.message || "No response received.";
+    let fullText = data?.candidates?.[0]?.content?.parts?.[0]?.text || data?.error?.message || "No response received.";
 
-    // Typing animation
-    responseBox.innerText = "";
-    const lines = fullText.split('\n');
+    //  Format enhancements:
+    fullText = fullText
+      .split('\n')
+      .map(line => {
+        // remove leading **
+        if (line.trim().startsWith("**") && line.trim().endsWith("**")) {
+          return `<b>${line.trim().replace(/\*\*/g, '')}</b>`;
+        }
+
+        // convert bullet list lines with * or - to bold bullet
+        if (line.trim().startsWith("* ") || line.trim().startsWith("- ")) {
+          return `<b>${line.replace(/^(\*|-)\s*/, '')}</b>`;
+        }
+
+        // emphasize headers like "Topic: Explanation"
+        if (line.includes(":")) {
+          const [key, value] = line.split(/:(.+)/);
+          return `<b>${key.trim()}:</b>${value}`;
+        }
+
+        return line;
+      })
+      .join('<br>');
+
+    //  Typing animation (line by line reveal)
+    responseBox.innerHTML = "";
+    const lines = fullText.split('<br>');
     let i = 0;
 
     function typeNextLine() {
       if (i < lines.length) {
-        responseBox.innerText += lines[i] + '\n';
+        responseBox.innerHTML += lines[i] + "<br>";
         i++;
         setTimeout(typeNextLine, 200);
       }
@@ -214,7 +237,4 @@ If the query is about code, explain and give the correct code example in the mos
     responseBox.innerText = "Network error while asking assistant.";
   }
 }
-
-
-
 
