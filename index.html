@@ -9,8 +9,22 @@
   <h1>AI-Powered Python Learning Assistant</h1>
 
   <section id="mood-section">
-    <h2>Select Difficulty</h2>
-    <select id="difficulty-select"> <!-- ✅ Fixed ID from mood-select -->
+    <h2>Select Subject and Difficulty</h2>
+
+    <!-- ✅ Added Subject Dropdown -->
+    <label for="subject-select">Subject:</label>
+    <select id="subject-select">
+      <option value="">Subject</option>
+      <option value="DBMS">DBMS</option>
+      <option value="Machine Learning">Machine Learning</option>
+      <option value="Python">Python</option>
+      <option value="JavaScript">JavaScript</option>
+      <option value="C++">C++</option>
+    </select>
+
+    <!-- ✅ Existing Difficulty Dropdown -->
+    <label for="difficulty-select">Difficulty:</label>
+    <select id="difficulty-select">
       <option value="basic">Basic</option>
       <option value="moderate">Moderate</option>
       <option value="harder">Harder</option>
