@@ -1,3 +1,4 @@
+
 /* Global Styles */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -45,6 +46,14 @@ select, input[type="text"] {
   font-size: 1rem;
 }
 
+/* Difficulty Dropdown Control */
+#difficulty-select {
+  width: auto;
+  min-width: 150px;
+  max-width: 200px;
+  display: inline-block;
+}
+
 /* Buttons */
 button {
   background-color: #00adb5;
@@ -58,6 +67,11 @@ button {
 }
 button:hover {
   background-color: #019ca7;
+}
+button:disabled {
+  background-color: #444;
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 /* Quiz Options */
@@ -88,14 +102,6 @@ input[type="radio"] {
   font-size: 1rem;
   line-height: 1.5;
 }
-/* Mood Dropdown - compact width */
-#mood-select {
-  width: auto;
-  min-width: 150px;
-  max-width: 200px;
-  display: inline-block;
-}
-
 
 #chat-input {
   background-color: #1a1a2e;
@@ -116,7 +122,6 @@ input[type="radio"] {
   border-color: #00ffc6;
 }
 
-/* Chatbot Response Styling */
 #chat-response {
   width: 60%;
   min-width: 250px;
@@ -132,24 +137,35 @@ input[type="radio"] {
   word-wrap: break-word;
 }
 
+/* Quiz Buttons Container */
 .quiz-buttons {
   display: flex;
   flex-direction: row;
-  gap: 15px; /* Adjust spacing between buttons */
+  gap: 15px;
   margin-top: 20px;
 }
 
 .quiz-buttons button {
-  background-color: #00cfc8; /* Keeps current theme */
+  background-color: #00cfc8;
   color: white;
   border: none;
-  padding: 10px 20px;
+  padding: 6px 15px;
   border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
+  font-size: 14px;
+  height: 30px;
+  line-height: 18px;
+  min-width: 80px;
+  box-sizing: border-box;
   transition: background-color 0.3s;
 }
 
 .quiz-buttons button:hover {
   background-color: #00b3ad;
+}
+
+/* Utility class to hide buttons */
+.hidden {
+  display: none;
 }
