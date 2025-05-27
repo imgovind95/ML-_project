@@ -103,23 +103,27 @@ document.getElementById("start-btn").addEventListener("click", () => {
 });
 
 document.getElementById("difficulty-select").addEventListener("change", () => {
-  document.getElementById("start-btn").disabled = false; // Enable start button
+  document.getElementById("start-btn").disabled = false;
 });
 
-async function generateQuizQuestions(difficulty) {
-  const prompt = `
-Generate 10 Python programming quiz questions suitable for "${difficulty}" difficulty.
-Each question must have:
-- question text
-- 4 answer options
-- correct answer (must match one of the options)
+document.getElementById("subject-select").addEventListener("change", () => {
+  document.getElementById("start-btn").disabled = false;
+});
 
-Return only a JSON array like:
+async function generateQuizQuestions(subject, difficulty) {
+  const prompt = `
+Generate 10 ${subject} programming quiz questions suitable for "${difficulty}" difficulty.
+Each question must include:
+- a clear question
+- 4 answer options
+- the correct answer (must match one of the options)
+
+Return only a valid JSON array in this format:
 [
   {
-    "question": "Question text?",
+    "question": "What is ...?",
     "options": ["A", "B", "C", "D"],
-    "answer": "B"
+    "answer": "C"
   }
 ]
 `;
@@ -150,7 +154,12 @@ Return only a JSON array like:
 
 async function startQuiz() {
   const difficulty = document.getElementById("difficulty-select").value;
-  if (!difficulty) return;
+  const subject = document.getElementById("subject-select").value;
+
+  if (!difficulty || !subject) {
+    alert("Please select both subject and difficulty.");
+    return;
+  }
 
   const quizContainer = document.getElementById("quiz-container");
   quizContainer.innerHTML = "<p>Loading questions...</p>";
@@ -165,7 +174,7 @@ async function startQuiz() {
   document.getElementById("submit-btn").style.display = "none";
   document.getElementById("feedback-msg").innerText = "";
 
-  shuffledQuestions = await generateQuizQuestions(difficulty);
+  shuffledQuestions = await generateQuizQuestions(subject, difficulty);
 
   if (shuffledQuestions.length === 0) {
     quizContainer.innerHTML = "<p>Failed to load questions. Please try again later.</p>";
@@ -187,9 +196,9 @@ function resetQuiz() {
 
 async function generateFeedback(percentage, mood) {
   const prompt = `
-I just completed a Python quiz with a score of ${percentage.toFixed(2)}% at "${mood}" difficulty.
-Give 2-3 sentences of motivational feedback.
-Also mention which areas or types of questions should be improved upon based on this score.
+I completed a quiz with a score of ${percentage.toFixed(2)}% at "${mood}" difficulty.
+Give 2–3 lines of encouraging feedback.
+Also suggest which topics I should improve.
 `;
 
   try {
@@ -205,7 +214,6 @@ Also mention which areas or types of questions should be improved upon based on 
     const content = data?.candidates?.[0]?.content;
     const msg = content?.parts?.[0]?.text || data?.error?.message || "No feedback received.";
     document.getElementById("feedback-msg").innerText = msg;
-
   } catch (error) {
     console.error("Gemini feedback error:", error);
     document.getElementById("feedback-msg").innerText = "Network error while getting feedback.";
@@ -221,8 +229,8 @@ async function chat() {
   responseBox.innerText = "Assistant is thinking...";
 
   const prompt = `
-You are a helpful Python tutor.
-Explain and answer this question clearly:
+You are a helpful tutor.
+Explain this clearly:
 
 "${userInput}"
 `;
@@ -267,11 +275,11 @@ Explain and answer this question clearly:
       }
     }
     typeNextLine();
-
   } catch (error) {
     console.error("Gemini assistant error:", error);
     responseBox.innerText = "Network error while asking assistant.";
   }
 }
+
 
 
