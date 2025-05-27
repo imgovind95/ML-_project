@@ -1,20 +1,7 @@
-const apiKey = 'AIzaSyBy_DTYl4i3cLqJ4q-FMjgImSlDKTrBuOg'; // Gemini API key
-let quizData = {
-  questions: [
-    { question: "What is the output of print(2 ** 3)?", options: ["6", "8", "9", "5"], answer: "8" },
-    { question: "Which keyword is used to create a function in Python?", options: ["func", "def", "function", "lambda"], answer: "def" },
-    { question: "Which data type is used to store True or False?", options: ["int", "str", "bool", "float"], answer: "bool" },
-    { question: "Which loop continues as long as a condition is True?", options: ["for", "while", "repeat", "loop"], answer: "while" },
-    { question: "How do you define a function in Python?", options: ["def myFunc():", "function myFunc()", "create myFunc()", "func myFunc()"], answer: "def myFunc():" },
-    { question: "Which data type is used to store text?", options: ["int", "str", "bool", "list"], answer: "str" },
-    { question: "How do you insert a comment in Python?", options: ["# This is a comment", "// comment", "/* comment */", "None of the above"], answer: "# This is a comment" },
-    { question: "What is the output of: print(len('Python'))?", options: ["5", "6", "7", "Error"], answer: "6" },
-    { question: "What is the sum of 3+6 ?", options: ["5", "8", "7", "9"], answer: "9" }
-  ]
-};
+const apiKey = 'AIzaSyBy_DTYl4i3cLqJ4q-FMjgImSlDKTrBuOg';
 
-let currentQuestionIndex = 0;
 let shuffledQuestions = [];
+let currentQuestionIndex = 0;
 let score = 0;
 let answeredCount = 0;
 let answeredMap = {};
@@ -23,26 +10,14 @@ function normalize(text) {
   return text.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
 }
 
-window.onload = () => {
-  shuffledQuestions = shuffleArray([...quizData.questions]);
-  showQuestion(currentQuestionIndex);
-};
-
-function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-}
-
 function showQuestion(index) {
   const quizContainer = document.getElementById("quiz-container");
   quizContainer.innerHTML = "";
 
   const q = shuffledQuestions[index];
-  const questionDiv = document.createElement("div");
+  if (!q) return;
 
+  const questionDiv = document.createElement("div");
   questionDiv.innerHTML = `
     <h3>Question ${index + 1} of ${shuffledQuestions.length}</h3>
     <p>${q.question}</p>
@@ -53,22 +28,21 @@ function showQuestion(index) {
 
   quizContainer.appendChild(questionDiv);
 
-  const nextBtn = document.getElementById("next-btn");
-  const prevBtn = document.getElementById("prev-btn");
-  const submitBtn = document.getElementById("submit-btn");
-
-  nextBtn.innerText = (index === shuffledQuestions.length - 1) ? "Submit Quiz" : "Next";
-  submitBtn.style.display = "none";
-  prevBtn.style.display = (index > 0) ? "inline" : "none";
+  document.getElementById("next-btn").innerText =
+    (index === shuffledQuestions.length - 1) ? "Submit Quiz" : "Next";
+  document.getElementById("submit-btn").style.display = "none";
+  document.getElementById("prev-btn").style.display = (index > 0) ? "inline-block" : "none";
 }
 
 function submitAnswer() {
   const selected = document.querySelector(`input[name="q"]:checked`);
   const currentQuestion = shuffledQuestions[currentQuestionIndex];
-  const correct = currentQuestion.answer;
+  if (!currentQuestion) return;
 
+  const correct = currentQuestion.answer;
   if (selected) {
     const userAnswer = selected.value.trim();
+
     if (!answeredMap[currentQuestionIndex]) {
       answeredCount++;
       if (normalize(userAnswer) === normalize(correct)) score++;
@@ -105,51 +79,125 @@ function submitQuiz() {
     <h3>Your Score: ${score} / ${total} (${percentage.toFixed(2)}%)</h3>
   `;
 
-  const mood = document.getElementById("mood-select").value;
+  const mood = document.getElementById("difficulty-select").value;
   generateFeedback(percentage, mood);
 
   document.getElementById("next-btn").style.display = "none";
   document.getElementById("prev-btn").style.display = "none";
-  document.getElementById("submit-btn").innerText = "Retest";
-  document.getElementById("submit-btn").style.display = "inline";
+  const submitBtn = document.getElementById("submit-btn");
+  submitBtn.innerText = "Retest";
+  submitBtn.style.display = "inline-block";
 }
 
-// Retest Handler
 document.getElementById("submit-btn").addEventListener("click", () => {
   if (document.getElementById("submit-btn").innerText === "Retest") {
-    currentQuestionIndex = 0;
-    score = 0;
-    answeredCount = 0;
-    answeredMap = {};
-    shuffledQuestions = shuffleArray([...quizData.questions]);
-    showQuestion(currentQuestionIndex);
-    document.getElementById("feedback-msg").innerText = "";
-    document.getElementById("submit-btn").style.display = "none";
-    document.getElementById("next-btn").style.display = "inline";
+    resetQuiz();
   }
 });
 
-// No inline onclick — use listeners
 document.getElementById("next-btn").addEventListener("click", submitAnswer);
 document.getElementById("prev-btn").addEventListener("click", prevQuestion);
 document.getElementById("ask-btn").addEventListener("click", chat);
+document.getElementById("start-btn").addEventListener("click", () => {
+  startQuiz();
+});
 
-// Gemini AI - Feedback Generator
-async function generateFeedback(percentage, mood) {
-  const prompt = `I just completed a Python quiz with a score of ${percentage.toFixed(2)}%. My mood is "${mood}". Give me motivating feedback in 2-3 sentences.`;
+document.getElementById("difficulty-select").addEventListener("change", () => {
+  document.getElementById("start-btn").disabled = false; // Enable start button
+});
+
+async function generateQuizQuestions(difficulty) {
+  const prompt = `
+Generate 10 Python programming quiz questions suitable for "${difficulty}" difficulty.
+Each question must have:
+- question text
+- 4 answer options
+- correct answer (must match one of the options)
+
+Return only a JSON array like:
+[
+  {
+    "question": "Question text?",
+    "options": ["A", "B", "C", "D"],
+    "answer": "B"
+  }
+]
+`;
 
   try {
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        contents: [
-          {
-            parts: [{ text: prompt }]
-          }
-        ]
+        contents: [{ parts: [{ text: prompt }] }]
+      })
+    });
+
+    const data = await response.json();
+    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+    const jsonStart = text.indexOf('[');
+    const jsonEnd = text.lastIndexOf(']') + 1;
+    const jsonString = text.slice(jsonStart, jsonEnd);
+
+    return JSON.parse(jsonString);
+  } catch (error) {
+    console.error("Error generating questions:", error);
+    alert("Failed to load questions. Please try again.");
+    return [];
+  }
+}
+
+async function startQuiz() {
+  const difficulty = document.getElementById("difficulty-select").value;
+  if (!difficulty) return;
+
+  const quizContainer = document.getElementById("quiz-container");
+  quizContainer.innerHTML = "<p>Loading questions...</p>";
+
+  currentQuestionIndex = 0;
+  score = 0;
+  answeredCount = 0;
+  answeredMap = {};
+
+  document.getElementById("next-btn").style.display = "none";
+  document.getElementById("prev-btn").style.display = "none";
+  document.getElementById("submit-btn").style.display = "none";
+  document.getElementById("feedback-msg").innerText = "";
+
+  shuffledQuestions = await generateQuizQuestions(difficulty);
+
+  if (shuffledQuestions.length === 0) {
+    quizContainer.innerHTML = "<p>Failed to load questions. Please try again later.</p>";
+    return;
+  }
+
+  showQuestion(currentQuestionIndex);
+
+  document.getElementById("start-btn").style.display = "none";
+  document.getElementById("next-btn").style.display = "inline-block";
+  document.getElementById("prev-btn").style.display = "none";
+  document.getElementById("submit-btn").style.display = "none";
+}
+
+function resetQuiz() {
+  document.getElementById("submit-btn").innerText = "Submit Quiz";
+  startQuiz();
+}
+
+async function generateFeedback(percentage, mood) {
+  const prompt = `
+I just completed a Python quiz with a score of ${percentage.toFixed(2)}% at "${mood}" difficulty.
+Give 2-3 sentences of motivational feedback.
+Also mention which areas or types of questions should be improved upon based on this score.
+`;
+
+  try {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }]
       })
     });
 
@@ -164,7 +212,6 @@ async function generateFeedback(percentage, mood) {
   }
 }
 
-// Gemini AI - Assistant Chat
 async function chat() {
   const inputElement = document.getElementById("chat-input");
   const userInput = inputElement.value.trim();
@@ -174,11 +221,10 @@ async function chat() {
   responseBox.innerText = "Assistant is thinking...";
 
   const prompt = `
-You are a helpful and intelligent assistant. A user has asked the following query. Please provide a clear, helpful, and complete response.
+You are a helpful Python tutor.
+Explain and answer this question clearly:
 
-Query: "${userInput}"
-
-If the query is about code, explain and give the correct code example in the most appropriate programming language (not just Python). If it’s a general question, respond informatively like a smart AI tutor.
+"${userInput}"
 `;
 
   try {
@@ -193,35 +239,26 @@ If the query is about code, explain and give the correct code example in the mos
     const data = await response.json();
     let fullText = data?.candidates?.[0]?.content?.parts?.[0]?.text || data?.error?.message || "No response received.";
 
-    //  Format enhancements:
     fullText = fullText
       .split('\n')
       .map(line => {
-        // remove leading **
         if (line.trim().startsWith("**") && line.trim().endsWith("**")) {
           return `<b>${line.trim().replace(/\*\*/g, '')}</b>`;
         }
-
-        // convert bullet list lines with * or - to bold bullet
         if (line.trim().startsWith("* ") || line.trim().startsWith("- ")) {
           return `<b>${line.replace(/^(\*|-)\s*/, '')}</b>`;
         }
-
-        // emphasize headers like "Topic: Explanation"
         if (line.includes(":")) {
           const [key, value] = line.split(/:(.+)/);
           return `<b>${key.trim()}:</b>${value}`;
         }
-
         return line;
       })
       .join('<br>');
 
-    //  Typing animation (line by line reveal)
     responseBox.innerHTML = "";
     const lines = fullText.split('<br>');
     let i = 0;
-
     function typeNextLine() {
       if (i < lines.length) {
         responseBox.innerHTML += lines[i] + "<br>";
@@ -229,7 +266,6 @@ If the query is about code, explain and give the correct code example in the mos
         setTimeout(typeNextLine, 200);
       }
     }
-
     typeNextLine();
 
   } catch (error) {
@@ -237,4 +273,5 @@ If the query is about code, explain and give the correct code example in the mos
     responseBox.innerText = "Network error while asking assistant.";
   }
 }
+
 
