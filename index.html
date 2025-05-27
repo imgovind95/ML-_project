@@ -9,22 +9,26 @@
   <h1>AI-Powered Python Learning Assistant</h1>
 
   <section id="mood-section">
-    <h2>Select Your Mood</h2>
-    <select id="mood-select">
-      <option value="confused">Confused</option>
-      <option value="confident">Confident</option>
-      <option value="stressed">Stressed</option>
+    <h2>Select Difficulty</h2>
+    <select id="difficulty-select"> <!-- ✅ Fixed ID from mood-select -->
+      <option value="basic">Basic</option>
+      <option value="moderate">Moderate</option>
+      <option value="harder">Harder</option>
     </select>
   </section>
 
   <section id="quiz-section">
     <h2>Python Quiz</h2>
+
+    <div class="quiz-buttons">
+      <button id="start-btn">Start Quiz</button>
+    </div>
+
     <div id="quiz-container"></div>
 
     <div class="quiz-buttons">
-      <!--  Removed onclicks; JS handles these via addEventListener -->
       <button id="prev-btn" style="display: none;">Previous</button>
-      <button id="next-btn">Next</button>
+      <button id="next-btn" style="display: none;">Next</button>
       <button id="submit-btn" style="display: none;">Submit Quiz</button>
     </div>
 
@@ -46,4 +50,3 @@
   <script src="script.js"></script>
 </body>
 </html>
-
