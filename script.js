@@ -9,7 +9,6 @@ let answeredMap = {};
 function normalize(text) {
   return text.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
 }
-
 function showQuestion(index) {
   const quizContainer = document.getElementById("quiz-container");
   quizContainer.innerHTML = "";
@@ -222,17 +221,26 @@ Also suggest which topics I should improve.
 
 async function chat() {
   const inputElement = document.getElementById("chat-input");
-  const userInput = inputElement.value.trim();
+  const userInputRaw = inputElement.value.trim();
   const responseBox = document.getElementById("chat-response");
-  if (!userInput) return;
+  if (!userInputRaw) return;
 
   responseBox.innerText = "Assistant is thinking...";
 
+  const cleanedInput = userInputRaw
+    .replace(/(explain the question|analysis of question)\s*/gi, '')
+    .trim();
+
+  const shortAnswerMode = !/explain/i.test(userInputRaw);
+
   const prompt = `
 You are a helpful tutor.
-Explain this clearly:
+Respond clearly and concisely.
 
-"${userInput}"
+${shortAnswerMode
+    ? `Give a short and direct answer (4-5 lines max) for this input: "${cleanedInput}"`
+    : `Explain the following clearly and in detail:\n\n"${cleanedInput}"`
+}
 `;
 
   try {
@@ -249,6 +257,7 @@ Explain this clearly:
 
     fullText = fullText
       .split('\n')
+      .filter(line => !/^(\*|-)?\s*(Explanation|Analysis|Understanding|Clarification)\b/i.test(line.trim()))
       .map(line => {
         if (line.trim().startsWith("**") && line.trim().endsWith("**")) {
           return `<b>${line.trim().replace(/\*\*/g, '')}</b>`;
@@ -280,8 +289,4 @@ Explain this clearly:
     responseBox.innerText = "Network error while asking assistant.";
   }
 }
-
-
-
-
 
