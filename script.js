@@ -76,7 +76,34 @@ function submitQuiz() {
   quizContainer.innerHTML = `
     <h3>You answered ${answeredCount} out of ${total} question(s).</h3>
     <h3>Your Score: ${score} / ${total} (${percentage.toFixed(2)}%)</h3>
+    <h3>Answer Summary:</h3>
   `;
+
+  shuffledQuestions.forEach((q, idx) => {
+    const userAnswer = answeredMap[idx]?.answer;
+    const correctAnswer = q.answer;
+    let statusIcon = "";
+    let statusText = "";
+
+    if (!userAnswer) {
+      statusText = "Skipped";
+    } else if (normalize(userAnswer) === normalize(correctAnswer)) {
+      statusText = "Correct";
+    } else {
+      statusText = "Wrong";
+    }
+
+    const questionHTML = `
+      <div style="margin-bottom: 10px; padding: 10px; border-left: 5px solid ${
+        statusIcon === "✅" ? "green" : statusIcon === "❌" ? "red" : "orange"
+      };">
+        <p><b>Q${idx + 1}:</b> ${q.question}</p>
+        <p><b>Your Answer:</b> ${userAnswer || "Not answered"} ${statusIcon} (${statusText})</p>
+        <p><b>Correct Answer:</b> ${correctAnswer}</p>
+      </div>
+    `;
+    quizContainer.innerHTML += questionHTML;
+  });
 
   const mood = document.getElementById("difficulty-select").value;
   generateFeedback(percentage, mood);
@@ -87,6 +114,7 @@ function submitQuiz() {
   submitBtn.innerText = "Retest";
   submitBtn.style.display = "inline-block";
 }
+
 
 document.getElementById("submit-btn").addEventListener("click", () => {
   if (document.getElementById("submit-btn").innerText === "Retest") {
