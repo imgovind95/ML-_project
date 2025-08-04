@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Learning Assistant</title>
+  <title>Python Learning Assistant</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,10 +11,10 @@
   <section id="mood-section">
     <h2>Select Subject and Difficulty</h2>
 
-    <!-- ✅ Added Subject Dropdown -->
+    <!--Added Subject Dropdown -->
     <label for="subject-select">Subject:</label>
     <select id="subject-select">
-      <option value="">Subject</option>
+      <option value="Subject">Subject</option>
       <option value="DBMS">DBMS</option>
       <option value="Machine Learning">Machine Learning</option>
       <option value="Operating System">Operating System</option>
@@ -23,7 +23,7 @@
       <option value="C++">C++</option>
     </select>
 
-    <!-- ✅ Existing Difficulty Dropdown -->
+    <!-- Existing Difficulty Dropdown -->
     <label for="difficulty-select">Difficulty:</label>
     <select id="difficulty-select">
       <option value="basic">Basic</option>
@@ -57,13 +57,18 @@
 
   <section id="chat-section">
     <h2>Ask the Assistant</h2>
-    <input type="text" id="chat-input" placeholder="Want to Ask Something?..." />
-    <button id="ask-btn">Ask</button>
+
+    <!-- ✅ CHANGED this line from <input type="text"> to <textarea> -->
+    <div class="chat-input-wrapper">
+  <textarea id="chat-input" placeholder="Want to Ask Something?..." rows="3"></textarea>
+  <button id="ask-btn">Ask</button>
+</div>
+
+
+    <!-- <button id="ask-btn">Ask</button> -->
     <div id="chat-response" class="output-box"></div>
   </section>
 
   <script src="script.js"></script>
 </body>
 </html>
-
-
