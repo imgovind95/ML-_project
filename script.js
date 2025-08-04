@@ -1,5 +1,7 @@
 const apiKey = 'AIzaSyBy_DTYl4i3cLqJ4q-FMjgImSlDKTrBuOg';
 
+
+
 let shuffledQuestions = [];
 let currentQuestionIndex = 0;
 let score = 0;
@@ -9,6 +11,7 @@ let answeredMap = {};
 function normalize(text) {
   return text.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
 }
+
 function showQuestion(index) {
   const quizContainer = document.getElementById("quiz-container");
   quizContainer.innerHTML = "";
@@ -82,7 +85,6 @@ function submitQuiz() {
   shuffledQuestions.forEach((q, idx) => {
     const userAnswer = answeredMap[idx]?.answer;
     const correctAnswer = q.answer;
-    let statusIcon = "";
     let statusText = "";
 
     if (!userAnswer) {
@@ -95,10 +97,10 @@ function submitQuiz() {
 
     const questionHTML = `
       <div style="margin-bottom: 10px; padding: 10px; border-left: 5px solid ${
-        statusIcon === "✅" ? "green" : statusIcon === "❌" ? "red" : "orange"
-      };">
+        statusText === "Correct" ? "green" : statusText === "Wrong" ? "red" : "orange"
+      }; background-color: #f9f9f9;">
         <p><b>Q${idx + 1}:</b> ${q.question}</p>
-        <p><b>Your Answer:</b> ${userAnswer || "Not answered"} ${statusIcon} (${statusText})</p>
+        <p><b>Your Answer:</b> ${userAnswer || "Not answered"} (${statusText})</p>
         <p><b>Correct Answer:</b> ${correctAnswer}</p>
       </div>
     `;
@@ -114,7 +116,6 @@ function submitQuiz() {
   submitBtn.innerText = "Retest";
   submitBtn.style.display = "inline-block";
 }
-
 
 document.getElementById("submit-btn").addEventListener("click", () => {
   if (document.getElementById("submit-btn").innerText === "Retest") {
@@ -251,7 +252,19 @@ async function chat() {
   const inputElement = document.getElementById("chat-input");
   const userInputRaw = inputElement.value.trim();
   const responseBox = document.getElementById("chat-response");
-  if (!userInputRaw) return;
+
+  const personalTriggers = [
+    /who.*(trained|train).*(you|this|project)/i,
+    /who.*(founder|creator|maker|developer|built|build|created|Owner).*/i,
+    /who.*(design|designed|made).*/i,
+    /who.*(developed|develop).*/i,
+    /who.*(wrote|coded|crafted).*/i
+  ];
+
+  if (personalTriggers.some(p => p.test(userInputRaw))) {
+    responseBox.innerHTML = `This learning assistant was developed by <b>Govind Kumar</b>. 🙌`;
+    return;
+  }
 
   responseBox.innerText = "Assistant is thinking...";
 
@@ -317,5 +330,6 @@ ${shortAnswerMode
     responseBox.innerText = "Network error while asking assistant.";
   }
 }
+
 
 
