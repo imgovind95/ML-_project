@@ -1,7 +1,5 @@
 const apiKey = 'AIzaSyBy_DTYl4i3cLqJ4q-FMjgImSlDKTrBuOg';
 
-// const apiKey = '';
-
 let shuffledQuestions = [];
 let currentQuestionIndex = 0;
 let score = 0;
