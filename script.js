@@ -1,5 +1,7 @@
 const apiKey = 'AIzaSyBy_DTYl4i3cLqJ4q-FMjgImSlDKTrBuOg';
 
+// const apiKey = '';
+
 let shuffledQuestions = [];
 let currentQuestionIndex = 0;
 let score = 0;
@@ -136,6 +138,14 @@ document.getElementById("subject-select").addEventListener("change", () => {
   document.getElementById("start-btn").disabled = false;
 });
 
+// ✅ [ADDED] Support Enter to submit, Shift+Enter to break line
+document.getElementById("chat-input").addEventListener("keydown", function (e) {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    document.getElementById("ask-btn").click();
+  }
+});
+
 async function generateQuizQuestions(subject, difficulty) {
   const prompt = `
 Generate 10 ${subject} programming quiz questions suitable for "${difficulty}" difficulty.
@@ -266,10 +276,7 @@ async function chat() {
 
   responseBox.innerText = "Assistant is thinking...";
 
-  const cleanedInput = userInputRaw
-    .replace(/(explain the question|analysis of question)\s*/gi, '')
-    .trim();
-
+  const cleanedInput = userInputRaw.replace(/(explain the question|analysis of question)\s*/gi, '').trim();
   const shortAnswerMode = !/explain/i.test(userInputRaw);
 
   const prompt = `
@@ -279,7 +286,7 @@ Respond clearly and concisely.
 ${shortAnswerMode
     ? `Give a short and direct answer (4-5 lines max) for this input: "${cleanedInput}"`
     : `Explain the following clearly and in detail:\n\n"${cleanedInput}"`
-}
+  }
 `;
 
   try {
@@ -302,7 +309,7 @@ ${shortAnswerMode
           return `<b>${line.trim().replace(/\*\*/g, '')}</b>`;
         }
         if (line.trim().startsWith("* ") || line.trim().startsWith("- ")) {
-          return `<b>${line.replace(/^(\*|-)\s*/, '')}</b>`;
+          return `<b>${line.replace(/^(\*|-)?\s*/, '')}</b>`;
         }
         if (line.includes(":")) {
           const [key, value] = line.split(/:(.+)/);
@@ -328,6 +335,3 @@ ${shortAnswerMode
     responseBox.innerText = "Network error while asking assistant.";
   }
 }
-
-
-
