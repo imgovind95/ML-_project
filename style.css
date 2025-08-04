@@ -229,3 +229,34 @@ input[type="radio"] {
 .hidden {
   display: none;
 }
+.chat-input-wrapper {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: #e0e0e0;
+  letter-spacing: 0.3px;
+  display: flex;
+  align-items: center;
+  gap: 10px; /* spacing between textarea and button */
+}
+
+.chat-input-wrapper #chat-input {
+  flex: 1;
+}
+
+.chat-input-wrapper #ask-btn {
+  align-self: center;
+}
+
+
+
+#chat-input::placeholder {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  color: #a0a0b2;
+  font-size: 0.95rem;
+  letter-spacing: 0.3px;
+  opacity: 0.85;
+}
+
