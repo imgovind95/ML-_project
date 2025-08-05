@@ -144,6 +144,47 @@ document.getElementById("chat-input").addEventListener("keydown", function (e) {
   }
 });
 
+// async function generateQuizQuestions(subject, difficulty) {
+//   const prompt = `
+// Generate 10 ${subject} programming quiz questions suitable for "${difficulty}" difficulty.
+// Each question must include:
+// - a clear question
+// - 4 answer options
+// - the correct answer (must match one of the options)
+
+// Return only a valid JSON array in this format:
+// [
+//   {
+//     "question": "What is ...?",
+//     "options": ["A", "B", "C", "D"],
+//     "answer": "C"
+//   }
+// ]
+// `;
+
+//   try {
+//     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify({
+//         contents: [{ parts: [{ text: prompt }] }]
+//       })
+//     });
+
+//     const data = await response.json();
+//     const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+//     const jsonStart = text.indexOf('[');
+//     const jsonEnd = text.lastIndexOf(']') + 1;
+//     const jsonString = text.slice(jsonStart, jsonEnd);
+
+//     return JSON.parse(jsonString);
+//   } catch (error) {
+//     console.error("Error generating questions:", error);
+//     alert("Failed to load questions. Please try again.");
+//     return [];
+//   }
+// }
 async function generateQuizQuestions(subject, difficulty) {
   const prompt = `
 Generate 10 ${subject} programming quiz questions suitable for "${difficulty}" difficulty.
@@ -152,7 +193,8 @@ Each question must include:
 - 4 answer options
 - the correct answer (must match one of the options)
 
-Return only a valid JSON array in this format:
+Return only a valid JSON array. No explanation or extra text.
+Format:
 [
   {
     "question": "What is ...?",
@@ -163,28 +205,52 @@ Return only a valid JSON array in this format:
 `;
 
   try {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }]
-      })
-    });
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }]
+        })
+      }
+    );
 
     const data = await response.json();
-    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
-    const jsonStart = text.indexOf('[');
-    const jsonEnd = text.lastIndexOf(']') + 1;
-    const jsonString = text.slice(jsonStart, jsonEnd);
+    if (data?.error) {
+      console.error("Gemini API Error:", data.error.message);
+      return [];
+    }
 
-    return JSON.parse(jsonString);
+    const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+
+    const jsonStart = rawText.indexOf("[");
+    const jsonEnd = rawText.lastIndexOf("]") + 1;
+    if (jsonStart === -1 || jsonEnd === -1) {
+      console.warn("Gemini did not return a JSON array.");
+      return [];
+    }
+
+    const jsonString = rawText.slice(jsonStart, jsonEnd);
+
+    try {
+      const parsed = JSON.parse(jsonString);
+      if (!Array.isArray(parsed) || parsed.length === 0) {
+        console.warn("Parsed quiz is empty or invalid.");
+        return [];
+      }
+      return parsed;
+    } catch (parseErr) {
+      console.error("JSON Parse Error:", parseErr);
+      return [];
+    }
   } catch (error) {
-    console.error("Error generating questions:", error);
-    alert("Failed to load questions. Please try again.");
+    console.error("Fetch Error:", error);
     return [];
   }
 }
+
 
 async function startQuiz() {
   const difficulty = document.getElementById("difficulty-select").value;
