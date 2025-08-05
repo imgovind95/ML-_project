@@ -278,3 +278,13 @@ input[type="radio"] {
   background-color: #575777;
 }
 
+#chat-input {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 0.95rem;
+  letter-spacing: 0.3px;
+  color: #a0a0b2; /* same as placeholder color */
+  opacity: 0.85;
+}
+
