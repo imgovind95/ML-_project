@@ -284,7 +284,8 @@ input[type="radio"] {
   font-weight: 400;
   font-size: 0.95rem;
   letter-spacing: 0.3px;
-  color: #a0a0b2; /* same as placeholder color */
+/*   color: #a0a0b2; /* same as placeholder color */ */
+  color: #ffffff;
   opacity: 0.85;
 }
 
