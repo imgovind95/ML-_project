@@ -96,7 +96,7 @@ function submitQuiz() {
     const questionHTML = `
       <div style="margin-bottom: 10px; padding: 10px; border-left: 5px solid ${
         statusText === "Correct" ? "green" : statusText === "Wrong" ? "red" : "orange"
-      }; background-color: #f9f9f9;">
+      };">
         <p><b>Q${idx + 1}:</b> ${q.question}</p>
         <p><b>Your Answer:</b> ${userAnswer || "Not answered"} (${statusText})</p>
         <p><b>Correct Answer:</b> ${correctAnswer}</p>
