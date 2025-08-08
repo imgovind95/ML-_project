@@ -1,2 +1,2 @@
-# ML-_project
+# Web-project
 HTML,CSS,JS
