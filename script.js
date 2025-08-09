@@ -193,7 +193,7 @@ async function generateQuizQuestions(subject, difficulty) {
     // ✅ Agar Aptitude select hai to Rajesh Verma ke syllabus based prompt
     prompt = `
 You are an expert aptitude trainer. 
-Generate 30 multiple-choice aptitude questions strictly based on the syllabus of the book:
+Generate 50 multiple-choice aptitude questions strictly based on the syllabus of the book:
 "Arithmetic Fastrack by Rajesh Verma".
 
 The syllabus includes (but not limited to) topics:
