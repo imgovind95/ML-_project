@@ -144,8 +144,94 @@ document.getElementById("chat-input").addEventListener("keydown", function (e) {
   }
 });
 
+// async function generateQuizQuestions(subject, difficulty) {
+//   const prompt = `
+// Generate 10 ${subject} programming quiz questions suitable for "${difficulty}" difficulty.
+// Each question must include:
+// - a clear question
+// - 4 answer options
+// - the correct answer (must match one of the options)
+
+// Return only a valid JSON array in this format:
+// [
+//   {
+//     "question": "What is ...?",
+//     "options": ["A", "B", "C", "D"],
+//     "answer": "C"
+//   }
+// ]
+// `;
+
+//   try {
+//     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify({
+//         contents: [{ parts: [{ text: prompt }] }]
+//       })
+//     });
+
+//     const data = await response.json();
+//     const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+//     const jsonStart = text.indexOf('[');
+//     const jsonEnd = text.lastIndexOf(']') + 1;
+//     const jsonString = text.slice(jsonStart, jsonEnd);
+
+//     return JSON.parse(jsonString);
+//   } catch (error) {
+//     console.error("Error generating questions:", error);
+//     alert("Failed to load questions. Please try again.");
+//     return [];
+//   }
+// }
+
 async function generateQuizQuestions(subject, difficulty) {
-  const prompt = `
+  let prompt = "";
+
+  if (subject.toLowerCase() === "aptitude") {
+    // ✅ Agar Aptitude select hai to Rajesh Verma ke syllabus based prompt
+    prompt = `
+You are an expert aptitude trainer. 
+Generate 30 multiple-choice aptitude questions strictly based on the syllabus of the book:
+"Arithmetic Fastrack by Rajesh Verma".
+
+The syllabus includes (but not limited to) topics:
+- Number System
+- HCF & LCM
+- Percentage
+- Profit & Loss
+- Simple Interest & Compound Interest
+- Ratio & Proportion
+- Partnership
+- Time, Speed, and Distance
+- Time & Work
+- Average
+- Mixture & Alligation
+- Boats & Streams
+- Pipes & Cisterns
+- Problems on Ages
+- Permutation, Combination, Probability
+
+The questions must match "${difficulty}" difficulty.
+Each question must have:
+- a clear question
+- 4 answer options
+- the correct answer (must be one of the options)
+
+Return only valid JSON array in format:
+[
+  {
+    "question": "What is ...?",
+    "options": ["A", "B", "C", "D"],
+    "answer": "B"
+  }
+]
+Only return the raw JSON, no markdown, no explanation.
+    `;
+  } else {
+    // ✅ Agar aptitude nahi hai to default programming prompt
+    prompt = `
 Generate 10 ${subject} programming quiz questions suitable for "${difficulty}" difficulty.
 Each question must include:
 - a clear question
@@ -160,16 +246,20 @@ Return only a valid JSON array in this format:
     "answer": "C"
   }
 ]
-`;
+    `;
+  }
 
   try {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }]
-      })
-    });
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }]
+        })
+      }
+    );
 
     const data = await response.json();
     const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
@@ -185,6 +275,7 @@ Return only a valid JSON array in this format:
     return [];
   }
 }
+
 async function startQuiz() {
   const difficulty = document.getElementById("difficulty-select").value;
   const subject = document.getElementById("subject-select").value;
