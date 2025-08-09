@@ -198,20 +198,52 @@ Generate 30 multiple-choice aptitude questions strictly based on the syllabus of
 
 The syllabus includes (but not limited to) topics:
 - Number System
-- HCF & LCM
-- Percentage
-- Profit & Loss
-- Simple Interest & Compound Interest
-- Ratio & Proportion
-- Partnership
-- Time, Speed, and Distance
-- Time & Work
-- Average
-- Mixture & Alligation
-- Boats & Streams
-- Pipes & Cisterns
-- Problems on Ages
-- Permutation, Combination, Probability
+-Series and Progressions
+-HCF & LCM
+-Simple and Decimal Fractions
+-Square Root and Cube Root
+-Indices and Surds
+-Simplification
+-Approximation
+-Problems Based on Trains
+-Boats and Streams
+-Races and Games of Skill
+-Clock and Calendar
+-Linear Equations
+-Quadratic Equations
+-Permutations and Combinations
+-Probability
+-Word Problems Based on Numbers
+-Average
+-Percentage
+-Profit and Loss
+-Discount
+-Simple Interest
+-Compound Interest
+-True Discount and Banker's Discount
+-Ratio and Proportion
+-Mixture & Alligation
+-Partnership
+-Unitary Method
+-Problems Based on Ages
+-Work and Time
+-Work and Wages
+-Pipes and Cisterns
+-Speed, Time and Distance
+-Area and Perimeter
+-Volume and Surface Area
+-Geometry
+-Coordinate Geometry
+-Trigonometry
+-Height and Distance
+-Set Theory
+-Statistics
+-Data Table
+-Pie Chart
+-Bar Chart
+-Line Graph
+-Mixed Graph
+-Data Sufficiency
 
 The questions must match "${difficulty}" difficulty.
 Each question must have:
