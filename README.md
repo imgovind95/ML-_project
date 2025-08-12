@@ -1,5 +1,3 @@
-# Web-project
-HTML,CSS,JS
 
 # Web-project
 
@@ -8,7 +6,7 @@ A concise one-liner describing your project.
 
 ---
 
-##  Table of Contents
+###  Table of Contents
 - [About](#about)  
 - [Features](#features)  
 - [Demo](#demo)  
@@ -22,7 +20,7 @@ A concise one-liner describing your project.
 
 ---
 
-##  About
+###  About
 Provide a brief description:
 - What does your project do?
 - Why is it useful?
@@ -30,7 +28,7 @@ Provide a brief description:
 
 ---
 
-##  Features
+###  Features
 Highlight what makes your project stand out:
 - Feature 1 (e.g., responsive layout)
 - Feature 2 (e.g., dynamic DOM manipulation)
@@ -38,7 +36,7 @@ Highlight what makes your project stand out:
 
 ---
 
-##  Demo
+###  Demo
 Visuals help! If you have screenshots or a GIF detailing functionality, add them here:
 
 
@@ -48,7 +46,7 @@ Edit
 
 ---
 
-##  Getting Started
+###  Getting Started
 
 ### Prerequisites
 List any requirements, like:
