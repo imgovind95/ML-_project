@@ -319,4 +319,40 @@ input[type="radio"] {
   border-radius: 6px;
   border: 2px solid #1e1e2f;  /* Optional: blends thumb with background */
 }
+#subject-select,
+#difficulty-select,
+#question-count {
+  width: auto;
+  min-width: 150px;
+  max-width: 200px;
+  display: inline-block;
+  cursor: pointer;
+  border-color: #00adb5;
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+  border: 1px solid #555;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 1rem;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+#subject-select:hover,
+#difficulty-select:hover,
+#question-count:hover {
+  border-color: #00ffc6;
+  box-shadow: 0 0 8px #00ffc6;
+}
+
+#subject-select:focus,
+#difficulty-select:focus,
+#question-count:focus {
+  outline: none;
+  border-color: #00ffc6;
+  box-shadow: 0 0 10px #00ffc6;
+  background-color: #1b1b1b;
+  color: #ffffff;
+}
 
