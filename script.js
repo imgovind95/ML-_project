@@ -186,18 +186,136 @@ document.getElementById("chat-input").addEventListener("keydown", function (e) {
 //   }
 // }
 
-async function generateQuizQuestions(subject, difficulty) {
+// async function generateQuizQuestions(subject, difficulty) {
+//   let prompt = "";
+
+//   if (subject.toLowerCase() === "aptitude") {
+//     // ✅ Agar Aptitude select hai to Rajesh Verma ke syllabus based prompt
+//     prompt = `
+// You are an expert aptitude trainer. 
+// Generate 50 multiple-choice aptitude questions strictly based on the syllabus of the book:
+// "Arithmetic Fastrack by Rajesh Verma".
+
+// The syllabus includes (but not limited to) topics:
+// - Number System
+// -Series and Progressions
+// -HCF & LCM
+// -Simple and Decimal Fractions
+// -Square Root and Cube Root
+// -Indices and Surds
+// -Simplification
+// -Approximation
+// -Problems Based on Trains
+// -Boats and Streams
+// -Races and Games of Skill
+// -Clock and Calendar
+// -Linear Equations
+// -Quadratic Equations
+// -Permutations and Combinations
+// -Probability
+// -Word Problems Based on Numbers
+// -Average
+// -Percentage
+// -Profit and Loss
+// -Discount
+// -Simple Interest
+// -Compound Interest
+// -True Discount and Banker's Discount
+// -Ratio and Proportion
+// -Mixture & Alligation
+// -Partnership
+// -Unitary Method
+// -Problems Based on Ages
+// -Work and Time
+// -Work and Wages
+// -Pipes and Cisterns
+// -Speed, Time and Distance
+// -Area and Perimeter
+// -Volume and Surface Area
+// -Geometry
+// -Coordinate Geometry
+// -Trigonometry
+// -Height and Distance
+// -Set Theory
+// -Statistics
+// -Data Table
+// -Pie Chart
+// -Bar Chart
+// -Line Graph
+// -Mixed Graph
+// -Data Sufficiency
+
+// The questions must match "${difficulty}" difficulty.
+// Each question must have:
+// - a clear question
+// - 4 answer options
+// - the correct answer (must be one of the options)
+
+// Return only valid JSON array in format:
+// [
+//   {
+//     "question": "What is ...?",
+//     "options": ["A", "B", "C", "D"],
+//     "answer": "B"
+//   }
+// ]
+// Only return the raw JSON, no markdown, no explanation.
+//     `;
+//   } else {
+//     // ✅ Agar aptitude nahi hai to default programming prompt
+//     prompt = `
+// Generate 10 ${subject} programming quiz questions suitable for "${difficulty}" difficulty.
+// Each question must include:
+// - a clear question
+// - 4 answer options
+// - the correct answer (must match one of the options)
+
+// Return only a valid JSON array in this format:
+// [
+//   {
+//     "question": "What is ...?",
+//     "options": ["A", "B", "C", "D"],
+//     "answer": "C"
+//   }
+// ]
+//     `;
+//   }
+
+//   try {
+//     const response = await fetch(
+//       `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+//       {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({
+//           contents: [{ parts: [{ text: prompt }] }]
+//         })
+//       }
+//     );
+
+//     const data = await response.json();
+//     const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+//     const jsonStart = text.indexOf('[');
+//     const jsonEnd = text.lastIndexOf(']') + 1;
+//     const jsonString = text.slice(jsonStart, jsonEnd);
+
+//     return JSON.parse(jsonString);
+//   } catch (error) {
+//     console.error("Error generating questions:", error);
+//     alert("Failed to load questions. Please try again.");
+//     return [];
+//   }
+// }
+async function generateQuizQuestions(subject, difficulty, questionCount) {
   let prompt = "";
 
   if (subject.toLowerCase() === "aptitude") {
-    // ✅ Agar Aptitude select hai to Rajesh Verma ke syllabus based prompt
     prompt = `
 You are an expert aptitude trainer. 
-Generate 50 multiple-choice aptitude questions strictly based on the syllabus of the book:
+Generate ${questionCount} multiple-choice aptitude questions strictly based on the syllabus of the book:
 "Arithmetic Fastrack by Rajesh Verma".
-
-The syllabus includes (but not limited to) topics:
-- Number System
+-- Number System
 -Series and Progressions
 -HCF & LCM
 -Simple and Decimal Fractions
@@ -245,26 +363,24 @@ The syllabus includes (but not limited to) topics:
 -Mixed Graph
 -Data Sufficiency
 
-The questions must match "${difficulty}" difficulty.
-Each question must have:
+// The questions must match "${difficulty}" difficulty.
+Each question must include:
 - a clear question
 - 4 answer options
-- the correct answer (must be one of the options)
+- the correct answer (must match one of the options)
 
-Return only valid JSON array in format:
+Return only a valid JSON array in this format:
 [
   {
     "question": "What is ...?",
     "options": ["A", "B", "C", "D"],
-    "answer": "B"
+    "answer": "C"
   }
 ]
-Only return the raw JSON, no markdown, no explanation.
     `;
   } else {
-    // ✅ Agar aptitude nahi hai to default programming prompt
     prompt = `
-Generate 10 ${subject} programming quiz questions suitable for "${difficulty}" difficulty.
+Generate ${questionCount} ${subject} programming quiz questions suitable for "${difficulty}" difficulty.
 Each question must include:
 - a clear question
 - 4 answer options
@@ -308,12 +424,80 @@ Return only a valid JSON array in this format:
   }
 }
 
+// async function startQuiz() {
+//   const difficulty = document.getElementById("difficulty-select").value;
+//   const subject = document.getElementById("subject-select").value;
+
+//   if (!difficulty || !subject) {
+//     alert("Please select both subject and difficulty.");
+//     return;
+//   }
+
+//   const quizContainer = document.getElementById("quiz-container");
+//   quizContainer.innerHTML = "<p>Loading questions...</p>";
+
+//   currentQuestionIndex = 0;
+//   score = 0;
+//   answeredCount = 0;
+//   answeredMap = {};
+
+//   document.getElementById("next-btn").style.display = "none";
+//   document.getElementById("prev-btn").style.display = "none";
+//   document.getElementById("submit-btn").style.display = "none";
+//   document.getElementById("feedback-msg").innerText = "";
+
+//   shuffledQuestions = await generateQuizQuestions(subject, difficulty);
+
+//   if (shuffledQuestions.length === 0) {
+//     quizContainer.innerHTML = "<p>Failed to load questions. Please try again later.</p>";
+//     return;
+//   }
+
+//   showQuestion(currentQuestionIndex);
+
+//   document.getElementById("start-btn").style.display = "none";
+//   document.getElementById("next-btn").style.display = "inline-block";
+//   document.getElementById("prev-btn").style.display = "none";
+//   document.getElementById("submit-btn").style.display = "none";
+// }
+
+// function resetQuiz() {
+//   document.getElementById("submit-btn").innerText = "Submit Quiz";
+//   startQuiz();
+// }
+
+// async function generateFeedback(percentage, mood) {
+//   const prompt = `
+// I completed a quiz with a score of ${percentage.toFixed(2)}% at "${mood}" difficulty.
+// Give 2–3 lines of encouraging feedback.
+// Also suggest which topics I should improve.
+// `;
+
+//   try {
+//     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify({
+//         contents: [{ parts: [{ text: prompt }] }]
+//       })
+//     });
+
+//     const data = await response.json();
+//     const content = data?.candidates?.[0]?.content;
+//     const msg = content?.parts?.[0]?.text || data?.error?.message || "No feedback received.";
+//     document.getElementById("feedback-msg").innerText = msg;
+//   } catch (error) {
+//     console.error("Gemini feedback error:", error);
+//     document.getElementById("feedback-msg").innerText = "Network error while getting feedback.";
+//   }
+// }
 async function startQuiz() {
   const difficulty = document.getElementById("difficulty-select").value;
   const subject = document.getElementById("subject-select").value;
+  const questionCount = parseInt(document.getElementById("question-count").value);
 
-  if (!difficulty || !subject) {
-    alert("Please select both subject and difficulty.");
+  if (!difficulty || !subject || !questionCount) {
+    alert("Please select subject, difficulty, and number of questions.");
     return;
   }
 
@@ -325,12 +509,8 @@ async function startQuiz() {
   answeredCount = 0;
   answeredMap = {};
 
-  document.getElementById("next-btn").style.display = "none";
-  document.getElementById("prev-btn").style.display = "none";
-  document.getElementById("submit-btn").style.display = "none";
-  document.getElementById("feedback-msg").innerText = "";
-
-  shuffledQuestions = await generateQuizQuestions(subject, difficulty);
+  // ✅ Pass questionCount to generator
+  shuffledQuestions = await generateQuizQuestions(subject, difficulty, questionCount);
 
   if (shuffledQuestions.length === 0) {
     quizContainer.innerHTML = "<p>Failed to load questions. Please try again later.</p>";
@@ -344,6 +524,7 @@ async function startQuiz() {
   document.getElementById("prev-btn").style.display = "none";
   document.getElementById("submit-btn").style.display = "none";
 }
+
 
 function resetQuiz() {
   document.getElementById("submit-btn").innerText = "Submit Quiz";
@@ -375,6 +556,7 @@ Also suggest which topics I should improve.
     document.getElementById("feedback-msg").innerText = "Network error while getting feedback.";
   }
 }
+
 
 async function chat() {
   const inputElement = document.getElementById("chat-input");
